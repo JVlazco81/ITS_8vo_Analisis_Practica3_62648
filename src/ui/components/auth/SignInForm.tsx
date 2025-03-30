@@ -7,6 +7,8 @@ import Button from "../ui/button/Button";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AuthServiceImpl } from "../../../infrastructure/services/AuthServiceImpl";
+import { LoginUseCause } from "../../../core/useCases/LoginUseCase";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,8 +28,17 @@ export default function SignInForm() {
     )
   })
 
-  const handleSubmit = (data: unknown) => {
-    console.log(data)
+  const handleSubmit = async (data: {email: string; password: string}) => {
+    const authService = new AuthServiceImpl();
+    const loginUseCase = new LoginUseCause(authService);
+
+    const user = await loginUseCase.execute(data.email, data.password);
+    if(user){
+      alert('Login successful');
+      window.location.href = '/';
+    }else{
+      alert('Login failed');
+    }
   }
 
   return (
