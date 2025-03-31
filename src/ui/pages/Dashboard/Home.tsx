@@ -5,8 +5,19 @@ import MonthlyTarget from "../../components/ecommerce/MonthlyTarget";
 import RecentOrders from "../../components/ecommerce/RecentOrders";
 import DemographicCard from "../../components/ecommerce/DemographicCard";
 import PageMeta from "../../components/common/PageMeta";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Asegurate de estar usando react-router-dom v6+
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/signin"); // redirige al login si no hay token
+    }
+  }, []);
+  
   return (
     <>
       <PageMeta
